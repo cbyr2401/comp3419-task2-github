@@ -56,7 +56,7 @@ public class Ball {
    private float g = 0.15;
    private int HARDNESS = 0;
    private int num_bounces = 0;
-   private float DECAY_FACTOR = 0.8;
+   private float DECAY_FACTOR = 0.85;
    // look and feel
    private PImage texture;
    private PShape object;
@@ -80,12 +80,9 @@ public class Ball {
      create();     
    }
    
-   public int move(){
-     // amount to delay by:
-     DECAY_FACTOR = pow(DECAY_FACTOR,num_bounces);
-     
+   public int move(){     
      // determine the "y" location
-     y += acceleration_y;
+     y += acceleration_y * (pow(DECAY_FACTOR, num_bounces));
      
      // determine the "y" lcoation
      // update the acceleration if necessary
@@ -106,7 +103,7 @@ public class Ball {
      // determine the "x" location
      // if the ball hits a left or right wall, the direction should become
      //  inverted.
-     x += acceleration_x;
+     x += acceleration_x * (pow(DECAY_FACTOR, num_bounces));
      
      if ( x < 0 + HARDNESS ) {
        // right wall is hit
@@ -125,7 +122,7 @@ public class Ball {
      // if the ball hits the back wall, the direction should become
      //  inverted.  Also, if it goes behind the field of view, it 
      //  should delete itself.
-     z += acceleration_z;
+     z += acceleration_z * (pow(DECAY_FACTOR, num_bounces));
      
      if ( z < -400 + HARDNESS ) {
        // bounce back, back wall is hit
