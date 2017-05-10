@@ -61,7 +61,7 @@ public class Ball {
    private PImage texture;
    private PShape object;
    
-   
+   // CONSTRUCTOR
    public Ball(int xPos, int yPos, int zPos){
      // initally the mouse position
      x = xPos;
@@ -84,20 +84,20 @@ public class Ball {
      // set to "1" for perfect preservation
      float POWER_PRESERVATION = 1; //(pow(DECAY_FACTOR, num_bounces));
      
-     // determine the "y" location
-     y += acceleration_y * POWER_PRESERVATION;
      
      // determine the "y" lcoation
      // update the acceleration if necessary
+     y += acceleration_y * POWER_PRESERVATION;
      acceleration_y += g;
      
+     // it hit the top of the box, automatically send the ball back to the ground (quickly).
      if ( y < 0 + HARDNESS ) {
-         // it hit the top of the box, automatically send the ball back to the ground (quickly).
+         
          acceleration_y = -acceleration_y;
      }
      
+     // hit the floor, bounce back up but be slightly in-elastic (1.15)
      if ( y > 400 - HARDNESS ) {
-         // hit the floor, bounce back up but be slightly in-elastic (1.15)
          acceleration_y = -acceleration_y / 1.15; 
          num_bounces++;
      }
@@ -108,14 +108,14 @@ public class Ball {
      //  inverted.
      x += acceleration_x * POWER_PRESERVATION;
      
+     // right wall is hit
      if ( x < 0 + HARDNESS ) {
-       // right wall is hit
        acceleration_x = -acceleration_x;
        num_bounces++;
      }
      
+     // left wall is hit
      if ( x > 400 - HARDNESS ) {
-       // left wall is hit
        acceleration_x = -acceleration_x;
        num_bounces++;
      }
@@ -127,16 +127,15 @@ public class Ball {
      //  should delete itself.
      z += acceleration_z * POWER_PRESERVATION;
      
+     // bounce back, back wall is hit
      if ( z < -400 + HARDNESS ) {
-       // bounce back, back wall is hit
        acceleration_z = -acceleration_z;
        num_bounces++;
      }
      
-     if ( z > 400 - HARDNESS)
-     {
-        // delete the ball from the window because it has fallen
-        //  out of the box.
+     // delete the ball from the window because it has fallen
+     //  out of the box.
+     if ( z > 400 - HARDNESS){
         return 0; // failure
      }
      
