@@ -19,6 +19,9 @@ void draw(){
   // clear the canvas
   background(128);
   
+  // draw the cube
+  drawCube();
+  
   // draw all the balls to the screen
   for ( int i = 0; i < m_balls.size(); i++ ){
      if(m_balls.get(i).move() == 0) 
@@ -127,4 +130,61 @@ public class Ball {
       object.setStroke(false);
    }
   
+}
+
+
+
+void drawCube(){
+  
+  pushMatrix();
+  
+  noStroke();
+  
+  //left side
+  beginShape(QUAD_STRIP);
+  fill(255,0,0); //red
+  vertex(0,0,0);
+  vertex(0,0,-400);
+  vertex(0,400,0);
+  vertex(0,400,-400);
+  //endShape();
+  
+  //right side
+  //beginShape(LINES);
+  fill(255,255,0); //yellow
+  vertex(400,0,0);
+  vertex(400,0,-400);
+  vertex(400,400,0);
+  vertex(400,400,-400);
+  //endShape();
+  
+  //top
+  //beginShape(LINES);
+  fill(0,255,0); //green
+  vertex(0,0,0);
+  vertex(0,0,-400);
+  vertex(400,0,0);
+  vertex(400,0,-400);
+  //endShape();
+  
+  //bottom
+  //beginShape(LINES);
+  fill(0,0,255); //blue
+  vertex(0,400,0);
+  vertex(0,400,-400);
+  vertex(400,400,0);
+  vertex(400,400,-400);
+  //endShape();
+  
+  //back
+  //beginShape(LINES);
+  fill(0,255,255); //cyan
+  vertex(0,0,-400);
+  vertex(400,0,-400);
+  vertex(0,400,-400);
+  vertex(400,400,-400);
+  endShape();
+  
+  
+  popMatrix();  
 }
