@@ -80,9 +80,12 @@ public class Ball {
      create();     
    }
    
-   public int move(){     
+   public int move(){
+     // set to "1" for perfect preservation
+     float POWER_PRESERVATION = 1; //(pow(DECAY_FACTOR, num_bounces));
+     
      // determine the "y" location
-     y += acceleration_y * (pow(DECAY_FACTOR, num_bounces));
+     y += acceleration_y * POWER_PRESERVATION;
      
      // determine the "y" lcoation
      // update the acceleration if necessary
@@ -103,7 +106,7 @@ public class Ball {
      // determine the "x" location
      // if the ball hits a left or right wall, the direction should become
      //  inverted.
-     x += acceleration_x * (pow(DECAY_FACTOR, num_bounces));
+     x += acceleration_x * POWER_PRESERVATION;
      
      if ( x < 0 + HARDNESS ) {
        // right wall is hit
@@ -122,7 +125,7 @@ public class Ball {
      // if the ball hits the back wall, the direction should become
      //  inverted.  Also, if it goes behind the field of view, it 
      //  should delete itself.
-     z += acceleration_z * (pow(DECAY_FACTOR, num_bounces));
+     z += acceleration_z * POWER_PRESERVATION;
      
      if ( z < -400 + HARDNESS ) {
        // bounce back, back wall is hit
