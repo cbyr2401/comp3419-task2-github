@@ -1,8 +1,9 @@
 // Bouncing Particles
+// @author: Cian Byrne
 //
-//
-//
-//
+// Some elements of the project were taken from the following source(s):
+// https://www.openprocessing.org/sketch/52806
+// 
 
 ArrayList<Ball> m_balls = new ArrayList<Ball>();
 int frames = 0;
@@ -10,14 +11,11 @@ int frames = 0;
 void setup(){
   size(400,400,P3D);
   
-  background(128);
-  
-  
 }
 
 void draw(){
   // clear the canvas
-  background(128);
+  background(0);
   
   // draw the cube
   drawCube();
@@ -31,11 +29,7 @@ void draw(){
      println("moving ball...", i);
   }
   
-  // draw mouse pointer
-  //fill(255);
-  //ellipse(mouseX, mouseY, 5, 5);
-  
-  //delay(500);
+  // debug
   frames++;
   println("frame: ", frames);
    
@@ -60,9 +54,11 @@ public class Ball {
    private float acceleration_x = 0;
    private float acceleration_z = -5;
    private float g = 0.15;
+   private int HARDNESS = 0;
+   private int num_bounces = 0;
+   private float DECAY_FACTOR = 0.8;
    // look and feel
    private PImage texture;
-   private float GRAVITY = 9.81;
    private PShape object;
    
    
@@ -72,29 +68,58 @@ public class Ball {
      z = zPos;
      y = yPos;
      
+     // randomly decide where the ball is going to fly
+     acceleration_x = random(-5, 5);
+     acceleration_y = random(-5, 5);
+     acceleration_z = -(random(5));
+
+     // load a texture for the spheres that are being shot
      texture = loadImage("earth.jpg");
      
-     create();
-     
+     // create the object.
+     create();     
    }
    
    public int move(){
+     // amount to delay by:
+     DECAY_FACTOR = pow(DECAY_FACTOR,num_bounces);
+     
      // determine the "y" location
      y += acceleration_y;
      
+     // determine the "y" lcoation
      // update the acceleration if necessary
      acceleration_y += g;
      
-     // check if we have hit the bottom
-     if ( y > 400 )
-     {
-         acceleration_y = -acceleration_y/1.15;
+     if ( y < 0 + HARDNESS ) {
+         // it hit the top of the box, automatically send the ball back to the ground (quickly).
+         acceleration_y = -acceleration_y;
      }
+     
+     if ( y > 400 - HARDNESS ) {
+         // hit the floor, bounce back up but be slightly in-elastic (1.15)
+         acceleration_y = -acceleration_y / 1.15; 
+         num_bounces++;
+     }
+     
      
      // determine the "x" location
      // if the ball hits a left or right wall, the direction should become
      //  inverted.
      x += acceleration_x;
+     
+     if ( x < 0 + HARDNESS ) {
+       // right wall is hit
+       acceleration_x = -acceleration_x;
+       num_bounces++;
+     }
+     
+     if ( x > 400 - HARDNESS ) {
+       // left wall is hit
+       acceleration_x = -acceleration_x;
+       num_bounces++;
+     }
+     
      
      // determine the "z" location
      // if the ball hits the back wall, the direction should become
@@ -102,21 +127,23 @@ public class Ball {
      //  should delete itself.
      z += acceleration_z;
      
-     if ( z < -400 ) {
-       // bounce back
+     if ( z < -400 + HARDNESS ) {
+       // bounce back, back wall is hit
        acceleration_z = -acceleration_z;
+       num_bounces++;
      }
      
-     if ( z > 400 )
+     if ( z > 400 - HARDNESS)
      {
+        // delete the ball from the window because it has fallen
+        //  out of the box.
         return 0; // failure
      }
      
      // draw the sphere
      pushMatrix();       //save
      translate(x, y, z); //move
-     
-     shape(object);           //render
+     shape(object);      //render
      popMatrix();        //move
           
      // success
