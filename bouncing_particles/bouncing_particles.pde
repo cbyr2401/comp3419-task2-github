@@ -139,52 +139,43 @@ void drawCube(){
   pushMatrix();
   
   noStroke();
+  beginShape(QUAD_STRIP);
   
   //left side
-  beginShape(QUAD_STRIP);
   fill(255,0,0); //red
   vertex(0,0,0);
   vertex(0,0,-400);
   vertex(0,400,0);
   vertex(0,400,-400);
-  //endShape();
   
   //right side
-  //beginShape(LINES);
   fill(255,255,0); //yellow
   vertex(400,0,0);
   vertex(400,0,-400);
   vertex(400,400,0);
   vertex(400,400,-400);
-  //endShape();
   
   //top
-  //beginShape(LINES);
   fill(0,255,0); //green
   vertex(0,0,0);
   vertex(0,0,-400);
   vertex(400,0,0);
   vertex(400,0,-400);
-  //endShape();
   
   //bottom
-  //beginShape(LINES);
   fill(0,0,255); //blue
   vertex(0,400,0);
   vertex(0,400,-400);
   vertex(400,400,0);
   vertex(400,400,-400);
-  //endShape();
   
   //back
-  //beginShape(LINES);
   fill(0,255,255); //cyan
   vertex(0,0,-400);
   vertex(400,0,-400);
   vertex(0,400,-400);
   vertex(400,400,-400);
+  
   endShape();
-  
-  
   popMatrix();  
 }
