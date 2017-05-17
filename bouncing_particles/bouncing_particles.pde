@@ -155,7 +155,7 @@ public class Ball {
         return 0; // failure
      }
      
-     // draw the sphere
+     // draw the sphere 
      pushMatrix();       //save
      translate(x, y, z); //move
      rotateY(frames * PI / spinspeed); // spin object
