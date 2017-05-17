@@ -27,7 +27,7 @@ void draw(){
   background(0);
   
   // set background lighting
-  //lights();
+  lights();
   //ambientLight(128, 128, 128);
   //directionalLight(128, 128, 128, 0, 0, -1);
   //lightFalloff(1, 0, 0);
@@ -221,7 +221,7 @@ void drawCube(){
   vertex(400,400,-400);
   
   //back
-  fill(0,255,255); //cyan
+  fill(255,255,255); //cyan
   vertex(0,0,-400);
   vertex(400,0,-400);
   vertex(0,400,-400);
