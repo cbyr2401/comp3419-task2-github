@@ -64,13 +64,18 @@ public class Ball {
    private int x = 0;
    private int y = 0;
    private int z = 0;
-   // motion
+   // motion - gravity and direction
    private float acceleration_y = 0;
    private float acceleration_x = 0;
    private float acceleration_z = -5;
-   private float spinspeed = 18.0;
    private float g = 0.15;
+   // motion - spin
+   private float spinspeed = 18.0;
+   private int x_spin = 1;
+   private int y_spin = 0;
+   // motion - when to bounce back
    private int HARDNESS = 0;
+   // motion - decay
    private int num_bounces = 0;
    private float DECAY_FACTOR = 0.85;
    // look and feel
@@ -108,7 +113,6 @@ public class Ball {
      
      // it hit the top of the box, automatically send the ball back to the ground (quickly).
      if ( y < 0 + HARDNESS ) {
-         
          acceleration_y = -acceleration_y;
      }
      
@@ -128,12 +132,14 @@ public class Ball {
      if ( x < 0 + HARDNESS ) {
        acceleration_x = -acceleration_x;
        num_bounces++;
+       y_spin = 1;
      }
      
      // left wall is hit
      if ( x > 400 - HARDNESS ) {
        acceleration_x = -acceleration_x;
        num_bounces++;
+       y_spin = -1;
      }
      
      
@@ -147,6 +153,7 @@ public class Ball {
      if ( z < -400 + HARDNESS ) {
        acceleration_z = -acceleration_z;
        num_bounces++;
+       x_spin = -1;
      }
      
      // delete the ball from the window because it has fallen
@@ -158,7 +165,8 @@ public class Ball {
      // draw the sphere 
      pushMatrix();       //save
      translate(x, y, z); //move
-     rotateY(frames * PI / spinspeed); // spin object
+     rotateX((frames * PI / spinspeed) * x_spin); // spin object
+     rotateY((frames * PI / spinspeed) * y_spin); // spin object
      shape(object);      //render
      popMatrix();        //move
           
