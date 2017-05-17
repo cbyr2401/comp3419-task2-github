@@ -6,16 +6,32 @@
 // 
 
 ArrayList<Ball> m_balls = new ArrayList<Ball>();
+ArrayList<PImage> m_textures;
+int m_num_textures = 0;
 int frames = 0;
 
 void setup(){
   size(400,400,P3D);
+  
+  // set the local path for the processing script
+  String path = sketchPath();
+  
+  // collect all the textures that can be found in the local path
+  m_textures = listFilesRecursive(path);
+  m_num_textures = m_textures.size();
   
 }
 
 void draw(){
   // clear the canvas
   background(0);
+  
+  // set background lighting
+  //lights();
+  //ambientLight(128, 128, 128);
+  //directionalLight(128, 128, 128, 0, 0, -1);
+  //lightFalloff(1, 0, 0);
+  //lightSpecular(0, 0, 0);
   
   // draw the cube
   drawCube();
@@ -26,7 +42,7 @@ void draw(){
      {
        m_balls.remove(i); 
      }
-     println("moving ball...", i);
+     //println("moving ball...", i);
   }
   
   // debug
@@ -40,7 +56,6 @@ void mouseClicked() {
    // add a new ball to the screen
   Ball temp = new Ball(mouseX, mouseY, 0);
   m_balls.add(temp);
-  println("creating ball...");
 }
 
 
@@ -53,6 +68,7 @@ public class Ball {
    private float acceleration_y = 0;
    private float acceleration_x = 0;
    private float acceleration_z = -5;
+   private float spinspeed = 18.0;
    private float g = 0.15;
    private int HARDNESS = 0;
    private int num_bounces = 0;
@@ -74,7 +90,7 @@ public class Ball {
      acceleration_z = -(random(5));
 
      // load a texture for the spheres that are being shot
-     texture = loadImage("earth.jpg");
+     texture = m_textures.get( int( random(0, m_num_textures - 1) ) );
      
      // create the object.
      create();     
@@ -142,6 +158,7 @@ public class Ball {
      // draw the sphere
      pushMatrix();       //save
      translate(x, y, z); //move
+     rotateY(frames * PI / spinspeed); // spin object
      shape(object);      //render
      popMatrix();        //move
           
@@ -159,7 +176,7 @@ public class Ball {
 }
 
 
-
+// Draws the box for the 
 void drawCube(){
   
   pushMatrix();
@@ -204,4 +221,35 @@ void drawCube(){
   
   endShape();
   popMatrix();  
+}
+
+
+// Function to get a list of all files in a directory and all subdirectories
+ArrayList<PImage> listFilesRecursive(String dir) {
+  ArrayList<PImage> fileList = new ArrayList<PImage>(); 
+  recurseDir(fileList, dir);
+  return fileList;
+}
+
+// Recursive function to traverse subdirectories
+void recurseDir(ArrayList<PImage> a, String dir) {
+  // create a new file object
+  File file = new File(dir);
+  if (file.isDirectory()) {
+    // If you want to include directories in the list - we don't
+    //a.add(file);  
+    File[] subfiles = file.listFiles();
+    for (int i = 0; i < subfiles.length; i++) {
+      // Call this function on all files in this directory
+      recurseDir(a, subfiles[i].getAbsolutePath());
+    }
+  } else {
+    String aname = file.getName();
+    
+    // only put images ending with .jpg into the array
+    if(aname.substring(aname.length() - 4).equals(".jpg") ){
+      a.add(loadImage(file.getAbsolutePath()));
+    }
+    
+  }
 }
